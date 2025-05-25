@@ -4,13 +4,8 @@
 
 ## System instructions
 
-## Migration
-````
-example:
-
-    alembic revision --autogenerate -m "commit information"
-    alembic upgrade head
-````
+docker build -t backend_ai_engineer_erikson .
+docker run -p 8000:8000 backend_ai_engineer_erikson
 
 ---
 
@@ -60,7 +55,30 @@ example:
     |-- README.md
     |-- requirements.txt
 
-## Database Structure (Not implemented)
+---
+
+# Deployment and Scalability Notes
+
+- Containerize using Docker with a Dockerfile defining environment and dependencies.
+- Deploy on Kubernetes for scalability and resilience; use Horizontal Pod Autoscaling (HPA) to handle varying load.
+- Use a managed vector database service or persist FAISS indices to disk for stateful storage.
+- Include logging and monitoring (e.g., Prometheus + Grafana) to track KPIs like latency, errors, confidence scores.
+- Secure endpoints with API authentication (e.g., API keys, OAuth).
+- Cache frequent CRM queries and knowledge base results to reduce LLM latency.
+
+
+
+---
+
+## Database Structure for former SQL (Not implemented)
+
+### Migration
+````
+example:
+
+    alembic revision --autogenerate -m "commit information"
+    alembic upgrade head
+````
 
     // AI Sales Agent Contextual Database
     // DBML version
