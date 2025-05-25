@@ -1,0 +1,28 @@
+[
+  {
+    "id": "example_001",
+    "conversation_history": [
+      {
+        "sender": "prospect",
+        "content": "I'm curious about how your product compares to Salesforce.",
+        "timestamp": "2024-01-01T10:00:00"
+      }
+    ],
+    "current_prospect_message": "Does it integrate with HubSpot?",
+    "prospect_id": "prospect_001",
+    "expected": {
+      "intent": "inquiry",
+      "entities": ["HubSpot"],
+      "sentiment": "neutral",
+      "suggested_response_draft": "Yes! Our product integrates seamlessly with HubSpot...",
+      "internal_next_steps": [
+        {
+          "action": "SCHEDULE_FOLLOW_UP",
+          "details": {
+            "reason": "answered integration query"
+          }
+        }
+      ]
+    }
+  }
+]

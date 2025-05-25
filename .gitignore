@@ -1,0 +1,5 @@
+# Key folder
+.env
+
+# Dependencies folder
+.venv
