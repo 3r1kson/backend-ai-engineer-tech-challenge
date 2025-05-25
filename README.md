@@ -4,7 +4,7 @@
 
 ## System instructions
 
-docker build -t backend_ai_engineer_erikson 
+docker build -t backend_ai_engineer_erikson .
 
 docker run -p 8000:8000 backend_ai_engineer_erikson
 
