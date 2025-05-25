@@ -6,7 +6,7 @@ from sklearn.preprocessing import MultiLabelBinarizer
 from nltk.translate.bleu_score import sentence_bleu, SmoothingFunction
 
 # app
-from src.app.models.process_message_request import ProcessMessageRequest
+from src.app.models.process_message_request_model import ProcessMessageRequestModel
 from src.app.services.conversation_manager_service import ConversationManager
 from src.app.services.message_service import process_incoming_message
 
@@ -19,7 +19,7 @@ class Evaluator:
         with open(dataset_path, "r", encoding="utf-8") as f:
             return json.load(f)
 
-    def evaluate(self, dataset_path: str):
+    def evaluate(self, dataset_path: str, knowledge: str):
         data = self.load_golden_dataset(dataset_path)
 
         total_samples = len(data)
@@ -36,7 +36,7 @@ class Evaluator:
         for sample in data:
             expected = sample["expected"]
 
-            request_data = ProcessMessageRequest(
+            request_data = ProcessMessageRequestModel(
                 conversation_history=sample["conversation_history"],
                 current_prospect_message=sample["current_prospect_message"],
                 prospect_id=sample["prospect_id"]
@@ -45,12 +45,21 @@ class Evaluator:
             actual_response = process_incoming_message(request_data)
             actual_json = json.loads(actual_response.body)
 
-            classification = actual_json["data"]["classification"]
-            intent = classification.get("intent")
-            sentiment = classification.get("sentiment")
-            entities = classification.get("entities", [])
-            internal_next_steps = actual_json["data"].get("internal_next_steps", [])
-            suggested_response = actual_json["data"].get("suggested_response_draft", "")
+            try:
+                if "data" not in actual_json or "classification" not in actual_json["data"]:
+                    print(f"❌ Skipping sample due to malformed response: {actual_json}")
+                    continue
+
+                classification = actual_json["data"]["classification"]
+                intent = classification.get("intent")
+                sentiment = classification.get("sentiment")
+                entities = classification.get("entities", [])
+                internal_next_steps = actual_json["data"].get("internal_next_steps", [])
+                suggested_response = actual_json["data"].get("suggested_response_draft", "")
+
+            except Exception as e:
+                print(f"❌ Error processing sample: {e}")
+                continue
 
             if intent == expected["intent"]:
                 correct_intent += 1

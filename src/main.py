@@ -8,8 +8,8 @@ from src.app.models.message_model import MessageModel
 from src.app.models.conversation_context_model import ConversationContext
 from src.app.models.analysis_result_model import AnalysisResult
 from src.app.models.actionable_output_model import ActionableOutput
-from src.app.models.process_message_response import ProcessMessageResponse
-from src.app.models.process_message_request import ProcessMessageRequest
+from src.app.models.process_message_response_model import ProcessMessageResponseModel
+from src.app.models.process_message_request_model import ProcessMessageRequestModel
 
 # Base.metadata.create_all(bind=engine)
 

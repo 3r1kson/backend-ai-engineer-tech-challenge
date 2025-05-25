@@ -60,7 +60,7 @@ example:
     |-- README.md
     |-- requirements.txt
 
-## Database Structure
+## Database Structure (Not implemented)
 
     // AI Sales Agent Contextual Database
     // DBML version

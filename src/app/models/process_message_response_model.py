@@ -2,7 +2,7 @@
 from pydantic import BaseModel
 from typing import List, Optional, Dict
 
-class ProcessMessageResponse(BaseModel):
+class ProcessMessageResponseModel(BaseModel):
     response_text: str
     action: Optional[str] = None
     classification: Dict[str, str]

@@ -1,11 +1,11 @@
 from src.app.services.message_service import process_incoming_message
-from src.app.models.process_message_request import ProcessMessageRequest
+from src.app.models.process_message_request_model import ProcessMessageRequestModel
 from src.app.models.message_model import MessageModel
 
 from datetime import datetime
 
 def test_process_message_with_tools():
-    request = ProcessMessageRequest(
+    request = ProcessMessageRequestModel(
         conversation_history=[
             MessageModel(sender="prospect", content="I'm interested in your product.", timestamp=datetime.now())
         ],

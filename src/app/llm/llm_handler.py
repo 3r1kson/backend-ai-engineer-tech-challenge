@@ -16,30 +16,21 @@ logger = logging.getLogger(__name__)
 class LLMHandler:
     def __init__(self):
         self.llm = ChatOpenAI(openai_api_key=get_open_ai_key(), temperature=0)
-        self.prompt = PromptTemplate(
+        self.tool_discovery_prompt = PromptTemplate(
             input_variables=["context", "message"],
             template="""
-            You are an expert AI sales assistant from Sailor AI. Analyze the context and the new message to:
-            1. Classify the intent, entities, and sentiment
-            2. Decide whether additional info is needed (e.g., CRM or product knowledge)
-            3. Generate a confident, helpful response
+            You are an expert AI sales assistant. Given the context and new message:
+            1. Classify intent, sentiment, and entities.
+            2. Decide if you require CRM data or knowledge base info.
+            3. Return JSON with 'tool_calls' specifying needed data fields or queries.
 
-            Return this as strict JSON with fields:
+            Return only JSON like this:
             {{
-              "response": "...",
-              "action": "...",
-              "classification": {{
-                "intent": "...",
-                "sentiment": "...",
-                "entities": ["...", "..."],
-                "priority": "low|medium|high"
-              }},
-              "confidence_score": 0.0-1.0,
-              "reasoning_trace": "Why you responded the way you did",
               "tool_calls": {{
                 "crm": {{"required": true|false, "fields": ["..."]}},
                 "knowledge_base": {{"required": true|false, "query": "..."}}
-              }}
+              }},
+              "classification": {{"intent": "...", "sentiment": "...", "entities": ["..."]}}
             }}
 
             Context:
@@ -49,29 +40,61 @@ class LLMHandler:
             {message}
             """
         )
-        self.chain = LLMChain(llm=self.llm, prompt=self.prompt)
+        self.tool_discovery_chain = LLMChain(llm=self.llm, prompt=self.tool_discovery_prompt)
+
+        self.final_response_prompt = PromptTemplate(
+            input_variables=["context", "message", "crm_data", "kb_data"],
+            template="""
+                    You are an expert AI sales assistant. Using the context, new message, CRM data, and knowledge base data, generate:
+                    1. A confident, helpful response.
+                    2. The intended action.
+                    3. Classification of intent, sentiment, entities, and priority.
+                    4. Confidence score and reasoning trace.
+
+                    Return this as strict JSON with fields:
+                    {{
+                      "response": "...",
+                      "action": "...",
+                      "classification": {{
+                        "intent": "...",
+                        "sentiment": "...",
+                        "entities": ["...", "..."],
+                        "priority": "low|medium|high"
+                      }},
+                      "confidence_score": 0.0-1.0,
+                      "reasoning_trace": "..."
+                    }}
+
+                    Context:
+                    {context}
+
+                    New Message:
+                    {message}
+
+                    CRM Data:
+                    {crm_data}
+
+                    Knowledge Base Data:
+                    {kb_data}
+                    """
+        )
+        self.final_response_chain = LLMChain(llm=self.llm, prompt=self.final_response_prompt)
 
     def analyze(self, context: str, message: str, prospect_id: Optional[str] = None) -> Dict[str, Any]:
-        raw_response = self.chain.run(context=context, message=message)
         try:
-            llm_output = json.loads(raw_response)
-        except json.JSONDecodeError:
-            logger.error(f"Failed to parse LLM response as JSON: {raw_response}")
-            llm_output = {
-                "response": "Sorry, I could not understand the request.",
-                "action": None,
-                "classification": {"intent": "unknown", "sentiment": "neutral", "entities": [], "priority": "low"},
-                "confidence_score": 0.0,
-                "reasoning_trace": "Failed to parse LLM output JSON",
-                "tool_calls": {}
+            tool_discovery_raw = self.tool_discovery_chain.run(context=context, message=message)
+            tool_discovery_output = json.loads(tool_discovery_raw)
+        except Exception as e:
+            logger.error(f"Error during tool discovery or parsing JSON: {e}")
+            tool_discovery_output = {
+                "tool_calls": {"crm": {"required": False}, "knowledge_base": {"required": False}},
+                "classification": {"intent": "unknown", "sentiment": "neutral", "entities": []}
             }
 
-        tool_usage_log = []
-
+        tool_calls = tool_discovery_output.get("tool_calls", {})
         crm_data = None
-        kb_results = None
-
-        tool_calls = llm_output.get("tool_calls", {})
+        kb_data = None
+        tool_usage_log = []
 
         if tool_calls.get("crm", {}).get("required") and prospect_id:
             crm_fields = tool_calls["crm"].get("fields", [])
@@ -86,22 +109,39 @@ class LLMHandler:
         if tool_calls.get("knowledge_base", {}).get("required"):
             query = tool_calls["knowledge_base"].get("query", "")
             if query:
-                kb_results = query_knowledge_base(query)
+                kb_data = query_knowledge_base(query)
                 tool_usage_log.append({
                     "tool": "KnowledgeBase",
                     "input": {"query": query},
-                    "output": kb_results
+                    "output": kb_data
                 })
 
-        result = {
-            "response": llm_output.get("response", ""),
-            "action": llm_output.get("action"),
-            "classification": llm_output.get("classification", {}),
-            "confidence_score": llm_output.get("confidence_score", 0.5),
-            "reasoning_trace": llm_output.get("reasoning_trace", ""),
+        crm_data_str = json.dumps(crm_data, indent=2) if crm_data else "None"
+        kb_data_str = json.dumps(kb_data, indent=2) if kb_data else "None"
+
+        try:
+            final_response_raw = self.final_response_chain.run(
+                context=context,
+                message=message,
+                crm_data=crm_data_str,
+                kb_data=kb_data_str
+            )
+            final_response_output = json.loads(final_response_raw)
+        except Exception as e:
+            logger.error(f"Error during final response or parsing JSON: {e}")
+            final_response_output = {
+                "response": "Sorry, I could not process your request.",
+                "action": None,
+                "classification": {"intent": "unknown", "sentiment": "neutral", "entities": [], "priority": "low"},
+                "confidence_score": 0.0,
+                "reasoning_trace": "Failed to parse final LLM output"
+            }
+
+        final_response_output.update({
+            "tool_calls": tool_calls,
             "tool_usage_log": tool_usage_log,
             "crm_data": crm_data,
-            "knowledge_base_results": kb_results
-        }
+            "knowledge_base_results": kb_data
+        })
 
-        return result
+        return final_response_output

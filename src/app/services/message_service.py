@@ -2,13 +2,11 @@
 import re
 
 # app
-from src.app.models.process_message_request import ProcessMessageRequest
-from src.app.llm.llm_handler import LLMHandler
+from src.app.models.process_message_request_model import ProcessMessageRequestModel
 from src.app.services.conversation_manager_service import ConversationManager
 from src.utils.http_responses import success_response, conflict_response, error_response, unauthorized_response, \
     bad_request_response
 
-llm = LLMHandler()
 conversationManager = ConversationManager()
 
 def format_conversation_history(history):
@@ -18,7 +16,7 @@ def extract_action(response_text: str):
     match = re.search(r"ACTION:\s*(.+)", response_text)
     return match.group(1).strip() if match else None
 
-def process_incoming_message(data: ProcessMessageRequest):
+def process_incoming_message(data: ProcessMessageRequestModel):
     if not data.current_prospect_message.strip():
         return bad_request_response("Current prospect message cannot be empty")
 
