@@ -1,8 +1,9 @@
+# python
 from fastapi import FastAPI
 
+# app
 # from src.config.config import Base, engine
 from src.app.api.routes import router as api_router
-
 from src.app.models.message_model import MessageModel
 from src.app.models.conversation_context_model import ConversationContext
 from src.app.models.analysis_result_model import AnalysisResult

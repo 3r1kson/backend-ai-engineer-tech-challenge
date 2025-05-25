@@ -1,14 +1,15 @@
+# python
 import json
 import logging
 from typing import Optional, Dict, Any
-
-from src.app.tools.crm_tool import fetch_prospect_details
-from src.app.tools.rag_tool import query_knowledge_base
-from src.config.config import get_open_ai_key
-
 from langchain_openai import ChatOpenAI
 from langchain.prompts import PromptTemplate
 from langchain.chains import LLMChain
+
+# app
+from src.app.tools.crm_tool import fetch_prospect_details
+from src.app.tools.rag_tool import query_knowledge_base
+from src.config.config import get_open_ai_key
 
 logger = logging.getLogger(__name__)
 

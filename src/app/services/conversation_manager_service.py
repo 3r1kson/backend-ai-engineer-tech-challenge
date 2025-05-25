@@ -1,9 +1,10 @@
+# python
 from typing import Optional
 
+# app
 from src.app.llm.llm_handler import LLMHandler
 from src.app.models.actionable_output_model import ActionableOutput
 from src.app.models.message_model import MessageModel
-
 
 class ConversationManager:
     def __init__(self):

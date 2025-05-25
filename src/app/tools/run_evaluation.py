@@ -5,8 +5,8 @@ from src.app.eval.evaluator import Evaluator
 def main():
     print("🔍 Running LLM Evaluation on Golden Dataset...")
 
-    orchestrator = ConversationManager()
-    evaluator = Evaluator(orchestrator)
+    conversation_manager = ConversationManager()
+    evaluator = Evaluator(conversation_manager)
 
     evaluator.evaluate("/home/erik/PycharmProjects/[Backend-AI_Engineer]Technical_Challenge_Erikson/src/app/eval/golden_dataset.json")
 

@@ -1,25 +1,199 @@
 [
   {
     "id": "example_001",
-    "conversation_history": [
-      {
-        "sender": "prospect",
-        "content": "I'm curious about how your product compares to Salesforce.",
-        "timestamp": "2024-01-01T10:00:00"
-      }
-    ],
-    "current_prospect_message": "Does it integrate with HubSpot?",
+    "conversation_history": [],
+    "current_prospect_message": "Do you offer a discount for bulk purchases?",
     "prospect_id": "prospect_001",
     "expected": {
-      "intent": "inquiry",
-      "entities": ["HubSpot"],
+      "intent": "pricing_inquiry",
+      "entities": [],
       "sentiment": "neutral",
-      "suggested_response_draft": "Yes! Our product integrates seamlessly with HubSpot...",
+      "suggested_response_draft": "Yes, we offer discounts for large orders. How many units are you looking to buy?",
       "internal_next_steps": [
         {
-          "action": "SCHEDULE_FOLLOW_UP",
+          "action": "PROVIDE_PRICING_DETAILS",
           "details": {
-            "reason": "answered integration query"
+            "reason": "bulk purchase discount inquiry"
+          }
+        }
+      ]
+    }
+  },
+  {
+    "id": "example_002",
+    "conversation_history": [],
+    "current_prospect_message": "Can you tell me more about your return policy?",
+    "prospect_id": "prospect_002",
+    "expected": {
+      "intent": "policy_question",
+      "entities": ["return policy"],
+      "sentiment": "neutral",
+      "suggested_response_draft": "Absolutely. Our return policy allows you to return items within 30 days, no questions asked.",
+      "internal_next_steps": [
+        {
+          "action": "EXPLAIN_POLICY",
+          "details": {
+            "reason": "return policy inquiry"
+          }
+        }
+      ]
+    }
+  },
+  {
+    "id": "example_003",
+    "conversation_history": [],
+    "current_prospect_message": "Hey, I’m interested in the premium plan.",
+    "prospect_id": "prospect_003",
+    "expected": {
+      "intent": "product_interest",
+      "entities": ["premium plan"],
+      "sentiment": "positive",
+      "suggested_response_draft": "Great choice! The premium plan includes 24/7 support, advanced features, and free upgrades. Would you like a demo?",
+      "internal_next_steps": [
+        {
+          "action": "OFFER_DEMO",
+          "details": {
+            "reason": "expressed interest in premium plan"
+          }
+        }
+      ]
+    }
+  },
+  {
+    "id": "example_004",
+    "conversation_history": [],
+    "current_prospect_message": "I tried reaching out last week and no one responded.",
+    "prospect_id": "prospect_004",
+    "expected": {
+      "intent": "complaint",
+      "entities": ["lack of response"],
+      "sentiment": "negative",
+      "suggested_response_draft": "I’m really sorry to hear that. Let me assist you right away and ensure this doesn’t happen again.",
+      "internal_next_steps": [
+        {
+          "action": "ESCALATE_SUPPORT",
+          "details": {
+            "reason": "customer complaint on response delay"
+          }
+        }
+      ]
+    }
+  },
+  {
+    "id": "example_005",
+    "conversation_history": [],
+    "current_prospect_message": "Can I pay in installments?",
+    "prospect_id": "prospect_005",
+    "expected": {
+      "intent": "payment_question",
+      "entities": ["installments"],
+      "sentiment": "neutral",
+      "suggested_response_draft": "Yes, we do offer installment payment options. Would you prefer monthly or bi-weekly?",
+      "internal_next_steps": [
+        {
+          "action": "EXPLAIN_PAYMENT_OPTIONS",
+          "details": {
+            "reason": "payment plan inquiry"
+          }
+        }
+      ]
+    }
+  },
+  {
+    "id": "example_006",
+    "conversation_history": [],
+    "current_prospect_message": "What’s the difference between the basic and standard package?",
+    "prospect_id": "prospect_006",
+    "expected": {
+      "intent": "product_comparison",
+      "entities": ["basic package", "standard package"],
+      "sentiment": "neutral",
+      "suggested_response_draft": "The basic package includes core features, while the standard adds analytics, reports, and priority support.",
+      "internal_next_steps": [
+        {
+          "action": "PROVIDE_COMPARISON_DETAILS",
+          "details": {
+            "reason": "product package comparison inquiry"
+          }
+        }
+      ]
+    }
+  },
+  {
+    "id": "example_007",
+    "conversation_history": [],
+    "current_prospect_message": "Thanks for the help earlier, I’m ready to sign up.",
+    "prospect_id": "prospect_007",
+    "expected": {
+      "intent": "conversion_signal",
+      "entities": [],
+      "sentiment": "positive",
+      "suggested_response_draft": "That’s fantastic! I’ll guide you through the signup process right away.",
+      "internal_next_steps": [
+        {
+          "action": "INITIATE_SIGNUP",
+          "details": {
+            "reason": "prospect ready to convert"
+          }
+        }
+      ]
+    }
+  },
+  {
+    "id": "example_008",
+    "conversation_history": [],
+    "current_prospect_message": "Where can I find the documentation?",
+    "prospect_id": "prospect_008",
+    "expected": {
+      "intent": "information_request",
+      "entities": ["documentation"],
+      "sentiment": "neutral",
+      "suggested_response_draft": "You can find our documentation at https://example.com/docs. Let me know if you need help navigating it.",
+      "internal_next_steps": [
+        {
+          "action": "SHARE_DOC_LINK",
+          "details": {
+            "reason": "documentation request"
+          }
+        }
+      ]
+    }
+  },
+  {
+    "id": "example_009",
+    "conversation_history": [],
+    "current_prospect_message": "I'm not sure this solution fits our needs.",
+    "prospect_id": "prospect_009",
+    "expected": {
+      "intent": "objection",
+      "entities": ["solution fit"],
+      "sentiment": "negative",
+      "suggested_response_draft": "Totally understand. Could you share more about your needs so I can see if there's a better fit?",
+      "internal_next_steps": [
+        {
+          "action": "REQUEST_MORE_INFO",
+          "details": {
+            "reason": "objection about solution fit"
+          }
+        }
+      ]
+    }
+  },
+  {
+    "id": "example_010",
+    "conversation_history": [],
+    "current_prospect_message": "Is this available in Spanish?",
+    "prospect_id": "prospect_010",
+    "expected": {
+      "intent": "localization_question",
+      "entities": ["Spanish"],
+      "sentiment": "neutral",
+      "suggested_response_draft": "Yes, our service is available in Spanish. Would you like me to switch the interface for you?",
+      "internal_next_steps": [
+        {
+          "action": "OFFER_LANGUAGE_SWITCH",
+          "details": {
+            "reason": "localization inquiry"
           }
         }
       ]
