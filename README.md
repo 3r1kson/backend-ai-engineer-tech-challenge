@@ -7,6 +7,10 @@
 - Download the project in the desired folder
 - Create or download the .env in the root folder with the OPEN_AI_KEY on it.
 
+```
+echo OPEN_AI_KEY="api_content" > .env
+```
+
 Run the commands below:
 
 ```

@@ -1,8 +1,11 @@
+# python
+from datetime import datetime
+import json
+
+# app
 from src.app.services.message_service import process_incoming_message
 from src.app.models.process_message_request_model import ProcessMessageRequestModel
 from src.app.models.message_model import MessageModel
-
-from datetime import datetime
 
 def test_process_message_with_tools():
     request = ProcessMessageRequestModel(
@@ -14,7 +17,7 @@ def test_process_message_with_tools():
     )
     response = process_incoming_message(request)
     assert response.status_code == 200
-    data = response.json()["data"]
+    data = json.loads(response.body.decode())["data"]
     assert "knowledge_base_results" in data
     assert "crm_data" in data
     assert "tool_usage_log" in data
