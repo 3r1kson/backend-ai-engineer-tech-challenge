@@ -77,18 +77,6 @@ http://127.0.0.1:8000/api/process_message
     |-- README.md
     |-- requirements.txt
 
----
-
-# Deployment and Scalability Notes
-
-- Containerize using Docker with a Dockerfile defining environment and dependencies.
-- Deploy on Kubernetes for scalability and resilience; use Horizontal Pod Autoscaling (HPA) to handle varying load.
-- Use a managed vector database service or persist FAISS indices to disk for stateful storage.
-- Include logging and monitoring (e.g., Prometheus + Grafana) to track KPIs like latency, errors, confidence scores.
-- Secure endpoints with API authentication (e.g., API keys, OAuth).
-- Cache frequent CRM queries and knowledge base results to reduce LLM latency.
-
-
 
 ---
 
