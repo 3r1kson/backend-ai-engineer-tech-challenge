@@ -13,5 +13,4 @@ python-dotenv~=1.1.0
 pytest>=7.0
 scikit-learn~=1.6.1
 nltk~=3.9.1
-sentence-transformers~=2.2.2
-huggingface_hub~=0.14.1
+sentence-transformers~=4.1.0
