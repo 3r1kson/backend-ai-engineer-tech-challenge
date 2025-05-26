@@ -5,10 +5,10 @@
 ## System instructions
 
 - Download the project in the desired folder
-- Create or download the .env in the root folder with the OPEN_AI_KEY on it.
+- Create the .env in the root folder with the OPEN_AI_KEY on it.
 
 ```
-echo OPEN_AI_KEY="api_content" > .env
+echo OPEN_AI_KEY="key..." > .env
 ```
 
 Run the commands below:
@@ -42,28 +42,35 @@ docker run --env-file .env -p 8000:8000 backend_ai_engineer_erikson
     |   |   |   |-- analysis_result_model.py
     |   |   |   |-- conversation_context_model.py
     |   |   |   |-- message_model.py
-    |   |   |   |-- process_message_request.py
-    |   |   |   |-- process_message_response.py
+    |   |   |   |-- process_message_request_model.py
+    |   |   |   |-- process_message_response_model.py
     |   |   |-- services
     |   |   |   |-- conversation_manager_service.py
     |   |   |   |-- message_service.py
     |   |   |-- tests
     |   |   |   |-- app
-    |   |   |   |   |-- test_message_service.py
+    |   |   |   |   |-- services
+    |   |   |   |   |   |-- test_message_service.py
+    |   |   |   |   |-- tools
+    |   |   |   |   |   |-- test_crm_tool.py
     |   |   |-- tools
     |   |   |   |-- crm_tool.py
     |   |   |   |-- rag_tool.py
     |   |   |   |-- run_evaluation.py
-    |   |   |-- assets
-    |   |   |   |-- images
-    |   |   |   |   |-- DBStructure_backendAIEngeneerTechChallenge_Erikson.png
+    |   |-- assets
+    |   |   |-- images
+    |   |   |   |-- DBStructure_backendAIEngeneerTechChallenge_Erikson.png
     |   |-- config
     |   |   |-- config.py
     |   |-- instance (provisory)
     |   |   |-- tech_challenge.db
+    |   |-- utils
+    |   |   |-- http_responses.py
     |   |-- main.py
     |   |-- run.py
-    |-- pytest.ini
+    |-- .env
+    |-- .gitignore
+    |-- Dockerfile
     |-- README.md
     |-- requirements.txt
 

@@ -21,3 +21,4 @@ def test_process_message_with_tools():
     assert "knowledge_base_results" in data
     assert "crm_data" in data
     assert "tool_usage_log" in data
+    print(f"Data: {data}")
