@@ -4,9 +4,16 @@
 
 ## System instructions
 
+- Download the project in the desired folder
+- Create or download the .env in the root folder with the OPEN_AI_KEY on it.
+
+Run the commands below:
+
+```
 docker build -t backend_ai_engineer_erikson .
 
 docker run --env-file .env -p 8000:8000 backend_ai_engineer_erikson
+```
 
 ---
 
