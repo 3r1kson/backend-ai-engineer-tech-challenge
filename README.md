@@ -19,6 +19,9 @@ docker build -t backend_ai_engineer_erikson .
 docker run --env-file .env -p 8000:8000 backend_ai_engineer_erikson
 ```
 
+The url of API in the local is:
+http://127.0.0.1:8000/api/process_message
+
 ---
 
 ## System Information
